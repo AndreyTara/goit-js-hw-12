@@ -1,0 +1,7 @@
+.section-more-btn {
+  display: block;
+}
+
+.section-more-btn.hidden {
+  display: none;
+}

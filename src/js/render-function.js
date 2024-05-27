@@ -1,4 +1,5 @@
 export function renderFunction(data) {
+  console.log(data.length);
   return data
     .map(
       item => `<a class="section-item" data-id=${item.id} href ='${item.largeImageURL}'> 

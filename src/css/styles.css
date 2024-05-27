@@ -5,6 +5,7 @@
   |============================
 */
 @import url('./reset.css');
+@import url('./btn.css');
 @import url('./form.css');
 @import url('./header.css');
 @import url('./message.css');
@@ -26,10 +27,19 @@
   -webkit-text-size-adjust: 100%;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 .section {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.wrap {
+  display: flex;
+  flex-direction: column;
 }

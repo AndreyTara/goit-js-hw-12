@@ -42,8 +42,11 @@ const refs = {
   formEl: document.querySelector('.section-form'),
   listEl: document.querySelector('.section-list'),
   textEl: document.querySelector('.section-text'),
+  btnEl: document.querySelector('.section-more-btn'),
 };
-
+const perPage = 30;
+const totalHits = Math.ceil(90 / perPage);
+let page = 1;
 refs.formEl.addEventListener('submit', e => {
   e.preventDefault();
   refs.listEl.innerHTML = '';
@@ -51,9 +54,9 @@ refs.formEl.addEventListener('submit', e => {
   if (!themaOfThePics) {
     return;
   }
-  pixabayApi(themaOfThePics)
-    .then(pics => {
-      // console.log(pics.hits);
+  pixabayApi(themaOfThePics, page, perPage)
+    .then(res => {
+      const pics = res.data;
       if (!pics.hits.length) {
         iziToast.error(optionsIziToast);
         return;
@@ -64,6 +67,8 @@ refs.formEl.addEventListener('submit', e => {
       lightBox.refresh();
       setTimeout(() => {
         refs.textEl.classList.add('hidden');
+        refs.textEl.style.order = 1;
+        refs.btnEl.style.display = 'block';
       }, 1000);
     })
     .catch(error => {
@@ -71,3 +76,57 @@ refs.formEl.addEventListener('submit', e => {
       console.log(error);
     });
 });
+
+refs.btnEl.addEventListener('click', handheSecondSubmit);
+function handheSecondSubmit(e) {
+  e.preventDefault();
+  page++;
+  const themaOfThePics = refs.formEl.elements.query.value;
+  pixabayApi(themaOfThePics, page, perPage)
+    .then(res => {
+      if (page > totalHits) {
+        iziToast.error({
+          position: 'topRight',
+          message: "We're sorry, there are no more posts to load",
+        });
+        refs.btnEl.style.display = 'none';
+        return;
+      }
+      const pics = res.data;
+      refs.btnEl.style.display = 'none';
+      refs.textEl.classList.remove('hidden');
+      const markup = renderFunction(pics.hits);
+      refs.listEl.insertAdjacentHTML('beforeend', markup);
+      lightBox.refresh();
+      setTimeout(() => {
+        refs.textEl.classList.add('hidden');
+        refs.btnEl.style.display = 'block';
+      }, 1000);
+    })
+    .catch(error => {
+      iziToast.error(optionsIziToast);
+      refs.textEl.classList.add('hidden');
+      refs.btnEl.style.display = 'none';
+      console.log(error);
+    });
+}
+
+// function update() {
+//   const container = document.querySelector('body');
+//   const elem = document.querySelector('.wrap');
+//   const rect = elem.getBoundingClientRect();
+
+// container.innerHTML = '';
+// for (const key in rect) {
+//   if (typeof rect[key] !== 'function') {
+//     let para = document.createElement('p');
+//     para.textContent = `${key} : ${rect[key]}`;
+//     container.appendChild(para);
+//   }
+// }
+// }
+
+// document.addEventListener('scroll', update);
+// update();
+
+// window.scrollBy(0, 200 * 2);
