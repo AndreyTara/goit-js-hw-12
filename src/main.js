@@ -44,7 +44,7 @@ const refs = {
   textEl: document.querySelector('.section-text'),
   btnEl: document.querySelector('.section-more-btn'),
 };
-const perPage = 30;
+const perPage = 15;
 const totalHits = Math.ceil(90 / perPage);
 let page = 1;
 refs.formEl.addEventListener('submit', e => {
