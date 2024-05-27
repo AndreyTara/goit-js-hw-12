@@ -1,4 +1,8 @@
-# Vanilla App Template
+# figma --https://www.figma.com/file/m8k9NQV7qZrtYDCvxfD68B/%D0%94%D0%97-JavaScript?type=design&node-id=3-1010&mode=design&t=eCh8cUwdfWOakuAr-0
+
+# Axios — це простий HTTP-клієнт --https://axios-http.com/
+
+# Vanilla App Template --https://vitejs.dev/
 
 Цей проект було створено за допомогою Vite. Для знайомства та налаштування
 додаткових можливостей [звернись до документації](https://vitejs.dev/).

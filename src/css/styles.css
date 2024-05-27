@@ -5,8 +5,10 @@
   |============================
 */
 @import url('./reset.css');
-@import url('./vite-promo.css');
+@import url('./form.css');
 @import url('./header.css');
+@import url('./message.css');
+@import url('./outMarcup.css');
 
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
@@ -22,4 +24,12 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+}
+
+.section {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
