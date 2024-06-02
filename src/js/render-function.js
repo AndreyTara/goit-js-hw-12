@@ -1,8 +1,11 @@
-export function renderFunction(data) {
-  console.log(data.length);
+export function renderFunction(data, page) {
+  // console.log(data.length);
   return data
     .map(
-      item => `<a class="section-item" data-id=${item.id} href ='${item.largeImageURL}'> 
+      (
+        item,
+        index
+      ) => `<a class="section-item" data-source ="${index}" data-id=${item.id} href ='${item.largeImageURL}'> 
             <img 
             class="section-img"
             src="${item.webformatURL}"

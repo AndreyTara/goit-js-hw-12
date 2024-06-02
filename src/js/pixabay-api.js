@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export function pixabayApi(picThema, page, perPage) {
+export function pixabayApi(picThema, page, perPage = 20) {
   const BASE_URL = 'https://pixabay.com/api/';
   const params = new URLSearchParams({
     key: '32923501-8d8c5bf31ee0b7b85cce4fb99',

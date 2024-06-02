@@ -1,73 +1,26 @@
-/* 
-.section-control {
+/* .section-output {
+  margin: 32px;
   display: flex;
-  align-items: center;
-}
-.section-input {
-  width: 272px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1.5;
-  letter-spacing: 0.04em;
-  text-align: left;
-  padding: 7px 16px 7px 16px;
-  outline: none;
-  border: none;
-  border: 1px solid #808080;
-  border-radius: 4px;
-}
-.section-input:hover {
-  border-color: #000000;
-}
-.section-input:active {
-  border-color: #4e75ff;
-}
-
-.section-btn {
-  margin-left: 8px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1.5;
-  letter-spacing: 0.04em;
-  text-align: left;
-  color: #ffffff;
-  width: 91px;
-  height: 40px;
-  padding: 8px 16px;
-  border-radius: 8px;
-  opacity: 0px;
-  background-color: #4e75ff;
-  border: none;
-}
-.section-btn:hover {
-  background-color: #6c8cff;
+  flex-direction: column;
+  gap: 24px;
 } */
-/* .section-text {
-  margin-top: 32px;
-  display: block;
-}
-.section-text.hidden {
-  display: none;
-} */
-
 .section-list {
-  margin: 0 auto;
-  padding: 32px;
+  margin: 32px auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 24px;
 }
-
+.section-list._active {
+  border: 1px solid red;
+}
 @media screen and (max-width: 375px) {
   .section-list {
-    padding: 5px;
+    margin: 5px;
     max-width: 360px;
   }
 }
-@media screen and (max-width: 1440px, min-width: 375px) {
+@media screen and (max-width: 1440px) and (min-width: 375px) {
   .section-list {
     max-width: 705px;
   }
@@ -80,8 +33,8 @@
 .section-item {
   position: relative;
 }
-.section-link {
-}
+/* .section-link {
+} */
 
 .section-img {
   width: 360px;
@@ -93,6 +46,7 @@
   cursor: pointer;
   transition: transform 250ms ease;
 }
+
 .section-soc {
   position: absolute;
   bottom: 0;
