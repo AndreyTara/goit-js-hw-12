@@ -15,8 +15,9 @@
 
 @media screen and (max-width: 768px) {
   .section-list {
-    margin: 5px auto;
+    margin: 10px auto;
     max-width: 360px;
+    gap: 10px;
   }
 }
 @media screen and (max-width: 1440px) and (min-width: 768px) {
@@ -46,6 +47,13 @@
   transition: transform 250ms ease;
 }
 
+@media screen and (max-width: 768px) {
+  .section-img:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+    transition: transform 250ms ease;
+  }
+}
 .section-soc {
   position: absolute;
   bottom: 0;
