@@ -46,32 +46,20 @@ const refs = {
 };
 
 // змінна макс елементів контенту
-const limitEl = 65;
+let totalHits = 500;
 
 // змінна кілкість елементів контенту за 1 запит
 const perPage = 15;
 
-//максимальна кількість сторінок
-const totalHits = Math.ceil(limitEl / perPage);
+//максимальна кількість кроків додавання контенту
+let totalPages = tpCount(totalHits, perPage);
 
-//початкова сторінка для завантаження
-let page = 1;
-
-//
-let curArrLenght = 0;
-
-// валідація форми інпута
-refs.formEl.addEventListener('input', fnInput);
-
-/**
- * check to ''
- * @param {*} event
- */
-function fnInput(event) {
-  if (event.target.tagName === 'INPUT' && !event.target.value.trim()) {
-    alert('Please fill the form - input.');
-  }
+function tpCount(totalHits, perPage) {
+  return Math.ceil(totalHits / perPage);
 }
+
+//початкова сторінка для завантаження контенту
+let page = 1;
 
 // підключення слухача подій на форму
 refs.formEl.addEventListener('submit', onHandleSubmit);
@@ -84,7 +72,9 @@ refs.formEl.addEventListener('submit', onHandleSubmit);
 async function onHandleSubmit(event) {
   //відключення стандартної поведінки форми
   event.preventDefault();
+  //відображення константи кнопки submit Form
   const btnSubmit = event.target.elements.btnSubmit;
+  // нективна кнопка до завешення запиту
   btnSubmit.disabled = true;
   //очищення списку додавання контенту
   refs.listEl.innerHTML = '';
@@ -94,7 +84,6 @@ async function onHandleSubmit(event) {
   if (!themaOfThePics) {
     return;
   }
-
   //відловлювання помилок при запитах
   try {
     // прибрання у тексту та лодеру класу 'hidden'
@@ -103,18 +92,17 @@ async function onHandleSubmit(event) {
     const res = await pixabayApi(themaOfThePics, page, perPage);
     //отримання данних за ключем '.data'
     const pics = res.data;
+    //перевірка на кількість можливих отриманих елементів із сайту для завантаження на поточну сторінцу
+    if (pics.totalHits < totalHits) {
+      totalPages = tpCount(pics.totalHits, perPage);
+    }
+
     //перевірка на отримання данних //якщо відсутні
     if (!pics.hits.length) {
       //вивести вікно попередження про відсутність даних
       iziToast.error(optionsIziToast);
       // додавання  у тексту та лодеру класу 'hidden'
       refs.textEl.classList.add('hidden');
-      return;
-    }
-    //перевірка 'сторінки' контенту на ліміт контенту
-    if (page >= totalHits) {
-      // кнопка loadMore  додаэться стиль  "display = 'none'""
-      refs.btnEl.style.display = 'none';
       return;
     }
 
@@ -125,6 +113,12 @@ async function onHandleSubmit(event) {
     //додавання lightBox до відмальованного контенту
     lightBox.refresh();
 
+    //перевірка 'сторінки' контенту на ліміт контенту
+    if (page >= totalPages) {
+      // кнопка loadMore  додаэться стиль  "display = 'none'""
+      refs.btnEl.style.display = 'none';
+      return;
+    }
     //затримка для роботи лодера 1 секунда
     setTimeout(() => {
       // текс+лодер додати класс 'hidden'
@@ -137,10 +131,14 @@ async function onHandleSubmit(event) {
       toScroll('.section-list');
     }, 1000);
   } catch (error) {
+    // відображення попереджуваного вікна про помилку
     iziToast.error(optionsIziToast);
+    // текс+лодер додати класс 'hidden'
     refs.textEl.classList.add('hidden');
+    // відображення про помилку у консолі
     console.log(error.message);
   } finally {
+    //відображення активної кнопки після запиту
     btnSubmit.disabled = false;
   }
 }
@@ -161,39 +159,53 @@ async function handleClick(event) {
   const themaOfThePics = refs.formEl.elements.query.value;
 
   try {
+    // прибрання у тексту та лодеру класу 'hidden'
     refs.textEl.classList.remove('hidden');
+    //вітворення запиту до серверу для отримання обїєкту
     const res = await pixabayApi(themaOfThePics, page, perPage);
+    //отримання arr для відображення на сторінці
     const pics = res.data;
-    console.log(pics.hits.length);
+    //кнопка loadMore додати стиль "display = 'none'"
+    refs.btnEl.style.display = 'none';
+    //формування шаблонної строки в залежності від отриманого масиву
+    const markup = renderFunction(pics.hits, page);
+    //відмільювівання контенту
+    refs.listEl.insertAdjacentHTML('beforeend', markup);
+    //навішування lightBox на зававнтажений на сторінку контент
+    lightBox.refresh();
     //якщо кількість сторінок відповідає максимальній кількості контенту
-    if (page > totalHits || pics.hits.length === 0) {
+    if (page >= totalPages) {
       //додавання попереджувального вікна про відсутність контенту або достатнього для відображення
       iziToast.error({
         ...optionsIziToast,
         title: "We're sorry, there are no more posts to load.",
       });
-
-      // кнопка loadMore додати стиль "display = 'block'""
+      // кнопка loadMore додати стиль "display = 'none'"
       refs.btnEl.style.display = 'none';
       // текс+лодер додати класс 'hidden'
       refs.textEl.classList.add('hidden');
       return;
     }
-    refs.btnEl.style.display = 'none';
-    const markup = renderFunction(pics.hits, page);
-    refs.listEl.insertAdjacentHTML('beforeend', markup);
-    lightBox.refresh();
+    //затримка щоб побачити спінер
     setTimeout(() => {
+      // текс+лодер додати класс 'hidden'
       refs.textEl.classList.add('hidden');
+      //// кнопка loadMore додати стиль "display = 'block'"
       refs.btnEl.style.display = 'block';
+      //плавний скрол  сторнки після підвантаження елементів
       toScroll('.section-list');
     }, 1000);
   } catch (error) {
+    // відображення попереджуваного вікна про помилку
     iziToast.error(optionsIziToast);
+    // текс+лодер додати класс 'hidden'
     refs.textEl.classList.add('hidden');
+    // кнопка loadMore додати стиль "display = 'none'"
     refs.btnEl.style.display = 'none';
+    // відображення про помилку у консолі
     console.log(error);
   } finally {
+    //відображення активної кнопки після запиту
     refs.btnEl.disabled = false;
   }
 }
@@ -205,8 +217,10 @@ async function handleClick(event) {
 function toScroll(srtClDom) {
   // refs.listEl.addEventListener('scroll', fnScroll, { once: true });
   // function fnScroll() {
+  // розрахунок 2 висоти останнього елементу контенту
   const heightItem =
     document.querySelector(`${srtClDom}`).lastChild.clientHeight * 2;
+  // скрол у відповідності до заданої висоти
   window.scrollBy({
     top: heightItem,
     left: 0,
