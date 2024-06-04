@@ -96,7 +96,6 @@ async function onHandleSubmit(event) {
     if (pics.totalHits < totalHits) {
       totalPages = tpCount(pics.totalHits, perPage);
     }
-
     //перевірка на отримання данних //якщо відсутні
     if (!pics.hits.length) {
       //вивести вікно попередження про відсутність даних
@@ -112,13 +111,20 @@ async function onHandleSubmit(event) {
     refs.listEl.insertAdjacentHTML('beforeend', markup);
     //додавання lightBox до відмальованного контенту
     lightBox.refresh();
-
-    //перевірка 'сторінки' контенту на ліміт контенту
+    // //перевірка 'сторінки' контенту на ліміт контенту
     if (page >= totalPages) {
-      // кнопка loadMore  додаэться стиль  "display = 'none'""
+      //додавання попереджувального вікна про відсутність контенту або достатнього для відображення
+      iziToast.error({
+        ...optionsIziToast,
+        title: "We're sorry, there are no more posts to load.",
+      });
+      // кнопка loadMore додати стиль "display = 'none'"
       refs.btnEl.style.display = 'none';
+      // текс+лодер додати класс 'hidden'
+      refs.textEl.classList.add('hidden');
       return;
     }
+
     //затримка для роботи лодера 1 секунда
     setTimeout(() => {
       // текс+лодер додати класс 'hidden'
