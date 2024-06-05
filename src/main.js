@@ -72,6 +72,8 @@ refs.formEl.addEventListener('submit', onHandleSubmit);
 async function onHandleSubmit(event) {
   //відключення стандартної поведінки форми
   event.preventDefault();
+  //початкова сторінка для завантаження контенту У РАЗЫ НОВОГО ЗАПРОСУ
+  page = 1;
   //відображення константи кнопки submit Form
   const btnSubmit = event.target.elements.btnSubmit;
   // нективна кнопка до завешення запиту
@@ -146,6 +148,7 @@ async function onHandleSubmit(event) {
   } finally {
     //відображення активної кнопки після запиту
     btnSubmit.disabled = false;
+    console.log(page);
   }
 }
 
@@ -213,6 +216,7 @@ async function handleClick(event) {
   } finally {
     //відображення активної кнопки після запиту
     refs.btnEl.disabled = false;
+    console.log(page);
   }
 }
 
